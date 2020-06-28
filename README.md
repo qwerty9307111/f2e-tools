@@ -123,3 +123,12 @@ tool.*
 .REGEXP_IS_WX               // 从 UA 判断是否为微信浏览器
 .REGEXP_IS_MOBILE           // 从 UA 判断是否为移动终端
 ```
+
+## Other
+
+``` javascript
+
+.hideMiddlePhoneNumber(phoneNumber, ?replaceStr = '*') // hideMiddlePhoneNumber :: (number | string, string = '*') -> string
+.hideFrontPhoneNumber(phoneNumber, ?replaceStr = '') // hideFrontPhoneNumber :: (number | string, string = '') -> string
+
+```
