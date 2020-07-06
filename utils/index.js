@@ -1,22 +1,25 @@
-const _ = require('lodash')
+const curry = (fn, arity = fn.length, ...args) =>
+  arity <= args.length ? fn(...args) : curry.bind(null, fn, arity, ...args)
 
-// map :: (Function, Array) -> Array
-const map = _.curry((fn, arr) => {
-  if (typeof fn !== 'function') {
-    throw new TypeError(`${fn} is not a function`)
+const flow = funcs => {
+  const length = funcs.length
+  let index = length
+  while (index--) {
+    if (typeof funcs[index] !== 'function') {
+      throw new TypeError('Expected a function')
+    }
   }
-  return _.map(arr, fn)
-})
-
-// map :: (Function, Array, *) -> *
-const reduce = _.curry((fn, arr) => {
-  if (typeof fn !== 'function') {
-    throw new TypeError(`${fn} is not a function`)
+  return (...args) => {
+    let idx = 0
+    var result = length ? funcs[idx].apply(this, args) : args[0]
+    while (++idx < length) {
+      result = funcs[idx].call(this, result)
+    }
+    return result
   }
-  return _.reduce(arr, fn)
-})
+}
 
 module.exports = {
-  map,
-  reduce
+  curry,
+  flow
 }
