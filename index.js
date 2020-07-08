@@ -1,4 +1,3 @@
-const tools = require('./lib')
+import tools from './lib/index.js'
 
-module.exports = tools
-module.exports.default = tools
+export default tools

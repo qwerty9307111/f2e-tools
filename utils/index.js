@@ -19,7 +19,7 @@ const flow = funcs => {
   }
 }
 
-module.exports = {
+export default {
   curry,
   flow
 }
