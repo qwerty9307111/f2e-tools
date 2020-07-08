@@ -16,7 +16,7 @@ module.exports = {
       format: 'umd', // 通用模块定义，以amd，cjs 和 iife 为一体
       name: 'f2eTools'
     }, {
-      file: resolve('./build/index.es.js'),
+      file: resolve('./build/index.esm.js'),
       format: 'esm', // 将软件包保存为 ES 模块文件，在现代浏览器中可以通过 <script type=module> 标签引入
       name: 'f2eTools'
     }, {
