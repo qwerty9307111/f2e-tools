@@ -11,59 +11,63 @@ npm install f2e-tools --save
 ## Use
 
 ``` javascript
-const tool = require('f2e-tools')
+const tool = require('f2e-tools').default
+// OR
+import tool from 'f2e-tools'
 
 tool.*
 ```
 
+[查看详细文档](./doc/README.zh-CN.md)
+
 ## Math
 
 ``` javascript
-.add(num1, num2)                   // add :: (number, number) -> number               两数相加
-.precisionAdd(num1, num2)          // precisionAdd :: (number, number) -> number      两数相加并返回正确结果
-.sub(num1, num2)                   // sub :: (number, number) -> number               两数相减
-.precisionSub(num1, num2)          // precisionSub :: (number, number) -> number      两数相减并返回正确结果
-.multiply(num1, num2)              // multiply :: (number, number) -> number          两数相乘
-.precisionMultiply(num1, num2)     // precisionMultiply :: (number, number) -> number 两数相乘并返回正确结果
-.divide(num1, num2)                // divide :: (number, number) -> number            两数相除
-.precisionDivide(num1, num2)       // precisionDivide :: (number, number) -> number   两数相除并返回正确结果
-.sum(...nums)                      // sum :: (...number) -> number                    对传入的全部数字依次相加
-.precisionSum(...nums)             // precisionSum :: (...number) -> number           对传入的全部数字依次相加并返回正确结果
-.minus(...nums)                    // minus :: (...number) -> number                  对传入的全部数字依次相减
-.precisionMinus(...nums)           // precisionMinus :: (...number) ->  number        对传入的全部数字依次相减并返回正确结果
-.times(...nums)                    // times :: (...number) -> number                  对传入的全部数字依次相乘
-.precisionTimes(...nums)           // precisionTimes :: (...number) -> number         对传入的全部数字依次相乘并返回正确结果
-.divides(...nums)                  // divides :: (...number) -> number                对传入的全部数字依次相除
-.precisionDivides(...nums)         // precisionDivides :: (...number) -> number       对传入的全部数字依次相除并返回正确结果
-.round(num, ?round = 2)            // round :: (number, number = 2) -> string         将数值按四舍五入转换为指定位数的小数，默认保留 2 位小数
-.toFixed(num, ?fixed = 2)          // toFixed :: (number, number = 2) -> string       将数值按银行家舍入法转换为指定位数的小数，默认保留 2 位小数
-.toPrecision(num, ?precision = 12) // toPrecision :: (number, number = 12) -> number  将数值转换为指数计数法，默认精度为 12
+.add(...number)                    // add               :: (...number) -> number
+.addition(num1, num2)              // addition          :: (number, number) -> number
+.subtract(...number)               // subtract          :: (...number) -> number
+.subtraction(num1, num2)           // subtraction       :: (number, number) -> number
+.multiply(...number)               // multiply          :: (...number) -> number
+.multiplication(num1, num2)        // multiplication    :: (number, number) -> number
+.divide(...number)                 // divide            :: (...number) -> number
+.division(num1, num2)              // division          :: (number, number) -> number
+.round(num, ?round = 2)            // round             :: (number, number = 2) -> number
 ```
 
 ## Amount
 
 ```javascript
+// number2Amount :: (number, string = '0,0', string = 'M/A') -> string
 .number2Amount(num, ?temp = '0,0', ?nullFormat = 'N/A', ?zeroFormat = 'N/A')
-.amount2Number(amount)
-.number2Percentage(num)
-.percentage2Number(percentage)
-.amount2Chinese(amount)
-.number2Chinese(num)
-.number2ChineseWithOption(opts)
+.amount2Number(amount)                    // amount2Number            :: string -> number
+.number2Percentage(num)                   // number2Percentage        :: number -> string
+.percentage2Number(percentage)            // percentage2Number        :: string -> number
+.amount2Chinese(amount)                   // amount2Chinese           :: number -> string
+.number2Chinese(num)                      // number2Chinese           :: number -> string
+.number2ChineseWithOption(opts， ?number) // number2ChineseWithOption :: (object, ?number) -> function | string
 ```
 
 ## Page
 
 ```javascript
-.scroll2Top(?DOM = window)
-.scroll2Bottom(?DOM = window)
-.isScrollTop(?DOM = window)
-.isScrollBottom(?DOM = window, ?limit = 0.1)
-.scrollTopByStep(?step = 0, ?DOM = window)
-.scrollBottomByStep(?step = 0, ?DOM = window)
-.toFullScreen()
-.exitFullScreen()
-.print(?opts)
+.scroll2Top(?DOM = window)                   // scroll2Top         :: (document = window) -> undefined
+.scroll2Bottom(?DOM = window)                // scroll2Bottom      :: (document = window) -> undefined
+.isScrollTop(?DOM = window)                  // isScrollTop        :: (document = window) -> boolean
+.isScrollBottom(?DOM = window, ?limit = 0.1) // isScrollBottom     :: (document = window, number = 0.1) -> boolean
+.scrollTopByStep(step, ?DOM = window)        // scrollTopByStep    :: (number, document = window) -> number
+.scrollBottomByStep(step, ?DOM = window)     // scrollBottomByStep :: (number, document = window) -> number
+.toFullScreen()                              // toFullScreen       :: any -> boolean
+.exitFullScreen()                            // exitFullScreen     :: any -> boolean
+.print(?opts)                                // print              :: object -> undefined
+.createElement(str)                          // createElement      :: string -> element
+.copyToClipboard(str)                        // copyToClipboard    :: string -> promise
+.preventScroll()                             // preventScroll      :: any -> undefined | number
+.recoverScroll()                             // recoverScroll      :: any -> undefined | number
+.disableSelect(?DOM = document)              // disableSelect      :: ?document -> undefined
+.disableContextMenu(?DOM = document)         // disableContextMenu :: ?document -> undefined
+.disableCopy(?DOM = document)                // disableCopy        :: ?document -> undefined
+.getSelectText()                             // getSelectText      :: any -> string
+.replaceCopy(str, ?DOM = document)           // replaceCopy        :: (string, ?document) -> undefined
 ```
 
 ## RegExp
@@ -124,11 +128,37 @@ tool.*
 .REGEXP_IS_MOBILE           // 从 UA 判断是否为移动终端
 ```
 
+## Type
+
+```javascript
+
+.isString    // isString    :: any -> boolean
+.isNumber    // isNumber    :: any -> boolean
+.isNaN       // isNaN       :: any -> boolean
+.isFinite    // isFinite    :: any -> boolean
+.isInteger   // isInteger   :: any -> boolean
+.isBigInt    // isBigInt    :: any -> boolean
+.isFloat     // isFloat     :: any -> boolean
+.isBoolean   // isBoolean   :: any -> boolean
+.isUndefined // isUndefined :: any -> boolean
+.isSymbol    // isSymbol    :: any -> boolean
+.isFunction  // isFunction  :: any -> boolean
+.isObject    // isObject    :: any -> boolean
+.isArray     // isArray     :: any -> boolean
+.isNull      // isNull      :: any -> boolean
+.isHTML      // isHTML      :: any -> boolean
+.isMap       // isMap       :: any -> boolean
+.isSet       // isSet       :: any -> boolean
+.isEmpty     // isEmpty     :: any -> boolean
+
+```
+
 ## Other
 
 ``` javascript
 
 .hideMiddlePhoneNumber(phoneNumber, ?replaceStr = '*') // hideMiddlePhoneNumber :: (number | string, string = '*') -> string
-.hideFrontPhoneNumber(phoneNumber, ?replaceStr = '') // hideFrontPhoneNumber :: (number | string, string = '') -> string
+.hideFrontPhoneNumber(phoneNumber, ?replaceStr = '')   // hideFrontPhoneNumber  :: (number | string, string = '') -> string
+.outOfNumber(number, max = 99)                         // outOfNumber           :: (number, number) -> string | number
 
 ```
