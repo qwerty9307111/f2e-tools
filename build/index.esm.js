@@ -180,24 +180,10 @@ var magnification = util.curry(function (times, num) {
  * @returns {Number}
  */
 
-var toPrecision = util.curry(function (num) {
+var toPrecision = function toPrecision(num) {
   var precision = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 12;
   return Number(num.toPrecision(precision));
-});
-/**
- * 将数值按银行家舍入法转换为指定位数的小数
- * @function
- * @author YinWenwu
- * @date 2020-05-25
- * @param {Number} num 需要转换的数值
- * @param {Number} fixed=2 小数位数，默认保留两位小数
- * @returns {String}
- */
-
-var toFixed = util.curry(function (num) {
-  var fixed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-  return toPrecision(num).toFixed(fixed);
-});
+};
 /**
  * 将数值按四舍五入转换为指定位数的小数
  * @function
@@ -208,18 +194,12 @@ var toFixed = util.curry(function (num) {
  * @returns {String}
  */
 
-var round = util.curry(function (num) {
+
+var round = function round(num) {
   var rounds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-  var res = Math.round(toPrecision(num) * pow(10)(rounds)) / pow(10)(rounds);
-
-  var _res$toString$split = res.toString().split('.'),
-      _res$toString$split2 = _slicedToArray(_res$toString$split, 2),
-      _int = _res$toString$split2[0],
-      _res$toString$split2$ = _res$toString$split2[1],
-      _float = _res$toString$split2$ === void 0 ? '' : _res$toString$split2$;
-
-  return "".concat(_int, ".").concat(_float.padEnd(rounds, 0));
-});
+  var times = pow(10, rounds);
+  return precisionDivide(Math.round(precisionMultiply(num, times)), times);
+};
 /**
  * 两数相加
  * @function
@@ -229,6 +209,7 @@ var round = util.curry(function (num) {
  * @param {Number} b
  * @returns {Number}
  */
+
 
 var add = util.curry(function (a, b) {
   return a + b;
@@ -273,56 +254,27 @@ var sub = util.curry(function (a, b) {
 var precisionSub = util.curry(function (a, b) {
   var toMagnification = magnification(Math.max(getFloatLength(a), getFloatLength(b)));
   return precisionDivide(util.flow([sub, toPrecision])(toMagnification(a), toMagnification(b)), toMagnification(1));
-}); // addAllItems :: Array -> Number
-
-var addAllItems = function addAllItems(arr) {
-  return arr.reduce(add);
-};
+}); // const addAllItems = arr => arr.reduce(add)
 
 var precisionAddAllItems = function precisionAddAllItems(arr) {
   return arr.reduce(precisionAdd);
-};
+}; // const minusAllItems = arr => arr.reduce(sub)
 
-var minusAllItems = function minusAllItems(arr) {
-  return arr.reduce(sub);
-};
 
 var precisionMinusAllItems = function precisionMinusAllItems(arr) {
   return arr.reduce(precisionSub);
-};
+}; // const multiplyAllItems = arr => arr.reduce(multiply)
 
-var multiplyAllItems = function multiplyAllItems(arr) {
-  return arr.reduce(multiply);
-};
 
 var precisionMultiplyAllItems = function precisionMultiplyAllItems(arr) {
   return arr.reduce(precisionMultiply);
-};
+}; // const divideAllItems = arr => arr.reduce(divide)
 
-var divideAllItems = function divideAllItems(arr) {
-  return arr.reduce(divide);
-};
 
 var precisionDivideAllItems = function precisionDivideAllItems(arr) {
   return arr.reduce(precisionDivide);
-};
-/**
- * 对传入的全部参数求和
- * @function
- * @author YinWenwu
- * @date 2020-05-25
- * @param {Array} params
- * @returns {Number}
- */
+}; // const sum = (...numbers) => addAllItems(numbers)
 
-
-var sum = function sum() {
-  for (var _len = arguments.length, numbers = new Array(_len), _key = 0; _key < _len; _key++) {
-    numbers[_key] = arguments[_key];
-  }
-
-  return addAllItems(numbers);
-};
 /**
  * 对传入的全部参数求和后转换为指数计数法
  * @function
@@ -334,81 +286,50 @@ var sum = function sum() {
 
 
 var precisionSum = function precisionSum() {
+  for (var _len = arguments.length, numbers = new Array(_len), _key = 0; _key < _len; _key++) {
+    numbers[_key] = arguments[_key];
+  }
+
+  return precisionAddAllItems(numbers);
+}; // const minus = (...numbers) => minusAllItems(numbers)
+
+
+var precisionMinus = function precisionMinus() {
   for (var _len2 = arguments.length, numbers = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
     numbers[_key2] = arguments[_key2];
   }
 
-  return precisionAddAllItems(numbers);
-};
+  return precisionMinusAllItems(numbers);
+}; // const times = (...numbers) => multiplyAllItems(numbers)
 
-var minus = function minus() {
+
+var precisionTimes = function precisionTimes() {
   for (var _len3 = arguments.length, numbers = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
     numbers[_key3] = arguments[_key3];
   }
 
-  return minusAllItems(numbers);
-};
-
-var precisionMinus = function precisionMinus() {
-  for (var _len4 = arguments.length, numbers = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-    numbers[_key4] = arguments[_key4];
-  }
-
-  return precisionMinusAllItems(numbers);
-};
-
-var times = function times() {
-  for (var _len5 = arguments.length, numbers = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-    numbers[_key5] = arguments[_key5];
-  }
-
-  return multiplyAllItems(numbers);
-};
-
-var precisionTimes = function precisionTimes() {
-  for (var _len6 = arguments.length, numbers = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-    numbers[_key6] = arguments[_key6];
-  }
-
   return precisionMultiplyAllItems(numbers);
-};
+}; // const divides = (...numbers) => divideAllItems(numbers)
 
-var divides = function divides() {
-  for (var _len7 = arguments.length, numbers = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-    numbers[_key7] = arguments[_key7];
-  }
-
-  return divideAllItems(numbers);
-};
 
 var precisionDivides = function precisionDivides() {
-  for (var _len8 = arguments.length, numbers = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-    numbers[_key8] = arguments[_key8];
+  for (var _len4 = arguments.length, numbers = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+    numbers[_key4] = arguments[_key4];
   }
 
   return precisionDivideAllItems(numbers);
 };
 
 var math = {
-  add: add,
-  precisionAdd: precisionAdd,
-  sub: sub,
-  precisionSub: precisionSub,
-  multiply: multiply,
-  precisionMultiply: precisionMultiply,
-  divide: divide,
-  precisionDivide: precisionDivide,
-  sum: sum,
-  precisionSum: precisionSum,
-  minus: minus,
-  precisionMinus: precisionMinus,
-  times: times,
-  precisionTimes: precisionTimes,
-  divides: divides,
-  precisionDivides: precisionDivides,
-  round: round,
-  toFixed: toFixed,
-  toPrecision: toPrecision
+  add: precisionSum,
+  addition: precisionAdd,
+  subtract: precisionMinus,
+  subtraction: precisionSub,
+  multiplication: precisionMultiply,
+  multiply: precisionTimes,
+  division: precisionDivide,
+  divide: precisionDivides,
+  round: round
 };
 
 /* eslint-disable no-control-regex */
@@ -635,18 +556,14 @@ var type = {
   isEmpty: isEmpty
 };
 
-var number2Amount = util.curry(function (num) {
+var number2Amount = function number2Amount(num) {
   var temp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '0,0';
   var nullFormat = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'N/A';
-  var zeroFormat = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'N/A';
 
-  if (num === null || num === undefined || num === '') {
+  if (num === null || num === undefined || num === '' || type.isNaN(Number(num))) {
     return nullFormat;
-  }
+  } // if (!Number(num)) { return num }
 
-  if (!Number(num)) {
-    return zeroFormat;
-  }
 
   var frontCurrency = temp.match(/(.*?)0/)[1]; // 模板字符串中的前置币种符号
 
@@ -661,19 +578,25 @@ var number2Amount = util.curry(function (num) {
   var _ref = amountStr.split('.')[1] || '',
       floatLength = _ref.length;
 
-  var _num$toString$split = num.toString().split('.'),
-      _num$toString$split2 = _slicedToArray(_num$toString$split, 2),
-      _int = _num$toString$split2[0],
-      _num$toString$split2$ = _num$toString$split2[1],
-      _float = _num$toString$split2$ === void 0 ? '' : _num$toString$split2$;
+  var _Number$toString$spli = Number(num).toString().split('.'),
+      _Number$toString$spli2 = _slicedToArray(_Number$toString$spli, 2),
+      _int = _Number$toString$spli2[0],
+      _Number$toString$spli3 = _Number$toString$spli2[1],
+      _float = _Number$toString$spli3 === void 0 ? '' : _Number$toString$spli3;
 
   var floatNum = math.round(_float / Math.pow(10, _float.length), floatLength);
-  var separator = temp.match(/0(.*?)0/)[1];
-  var intString = "".concat(_int).replace(/(\d)(?=(?:\d{3})+$)/g, '$1' + separator).replace(/-/g, ''); // 将整数部分逢三一断
 
-  var floatString = floatLength ? '.' + floatNum.split('.')[1] : '';
+  if (floatNum === 1) {
+    floatNum = '0.0'.padEnd(floatLength + 2, 0);
+    _int = Number(_int) + 1;
+  }
+
+  var separator = temp.match(/0(.*?)0/)[1];
+  var intString = "".concat(_int < 0 ? 0 - _int : _int).replace(/(\d)(?=(?:\d{3})+$)/g, '$1' + separator); // 将整数部分逢三一断
+
+  var floatString = floatLength && "".concat(floatNum).split('.')[1] ? '.' + "".concat(floatNum).split('.')[1].padEnd(floatLength, 0) : '';
   return "".concat(_int < 0 ? '-' : '').concat(frontCurrency).concat(intString).concat(floatString, " ").concat(backCurrency.trimStart()).trimEnd();
-});
+};
 
 var amount2Number = function amount2Number(amount) {
   var amountStr = "".concat(amount);
@@ -697,11 +620,13 @@ var amount2Number = function amount2Number(amount) {
 };
 
 var number2Percentage = function number2Percentage(number) {
-  return math.precisionMultiply(number, 100) + '%';
+  var res = math.multiplication(number, 100);
+  if (type.isNaN(res)) return null;
+  return res + '%';
 };
 
 var percentage2Number = function percentage2Number(percentage) {
-  return math.precisionDivide(Number.parseFloat(percentage), 100);
+  return math.division(Number.parseFloat(percentage), 100) || null;
 };
 
 var int2Chinese = function int2Chinese(num) {
@@ -792,7 +717,7 @@ var float2Chinese = function float2Chinese(num) {
   };
   var number = parseFloat(num);
 
-  if (!Number.isFinite(number)) {
+  if (!type.isFloat(number)) {
     return '';
   }
 
@@ -844,12 +769,10 @@ var number2ChineseWithOption = util.curry(function (option, amount) {
     throw new Error('param "option" type error');
   }
 
+  if (type.isNaN(Number(amount))) return null;
   var MAX_NUM = 999999999999999.9; // 最大处理的数字
 
-  if (amount >= MAX_NUM) {
-    return amount;
-  }
-
+  if (amount >= MAX_NUM) return amount;
   var CN_INT_LAST = option.type === 'money' ? '元' : '点';
   var CN_INTEGER = '整';
   var INT_PART = int2Chinese(amount, option);
@@ -887,6 +810,10 @@ var getDom = function getDom(dom) {
   return isHTML$1(dom) ? dom : window;
 };
 
+var getElement = function getElement(dom) {
+  return isHTML$1(dom) ? dom : window.document;
+};
+
 var getScrollTop = function getScrollTop(dom) {
   var bodyScrollTop = 0;
   var documentScrollTop = 0;
@@ -917,11 +844,13 @@ var getWindowHeight = function getWindowHeight(dom) {
   return document.body.clientHeight;
 };
 
-var isScrollTop = function isScrollTop(dom) {
+var isScrollTop = function isScrollTop() {
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
   return getScrollTop(dom) <= 0;
 };
 
-var isScrollBottom = function isScrollBottom(dom) {
+var isScrollBottom = function isScrollBottom() {
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
   var limit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.1;
   var res = getScrollTop(dom) + getWindowHeight(dom) - getScrollHeight(dom);
   return res >= 0 && res <= limit;
@@ -937,15 +866,18 @@ var doScroll = function doScroll(dom) {
   return getScrollTop(dom);
 };
 
-var scroll2Top = function scroll2Top(dom) {
+var scroll2Top = function scroll2Top() {
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
   return doScroll(dom, 0);
 };
 
-var scroll2Bottom = function scroll2Bottom(dom) {
+var scroll2Bottom = function scroll2Bottom() {
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
   return doScroll(dom, getScrollHeight(dom));
 };
 
-var scrollTopByStep = function scrollTopByStep(step, dom) {
+var scrollTopByStep = function scrollTopByStep(step) {
+  var dom = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window;
   var scrollTopNum = getScrollTop(dom);
 
   if (scrollTopNum > 0) {
@@ -956,7 +888,8 @@ var scrollTopByStep = function scrollTopByStep(step, dom) {
   return scrollTopNum;
 };
 
-var scrollBottomByStep = function scrollBottomByStep(step, dom) {
+var scrollBottomByStep = function scrollBottomByStep(step) {
+  var dom = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window;
   var scrollTopNum = getScrollTop(dom);
 
   if (isScrollBottom(dom, 0)) {
@@ -1104,7 +1037,7 @@ var copyToClipboard = function copyToClipboard(str) {
 
 var scrollTop = 0;
 
-function preventScroll() {
+var preventScroll = function preventScroll() {
   if (document.body.dataset.preventScroll === 'true') return false;
   scrollTop = getScrollTop();
   document.body.style['overflow-y'] = 'hidden';
@@ -1113,9 +1046,9 @@ function preventScroll() {
   document.body.style.top = -scrollTop + 'px';
   document.body.dataset.preventScroll = true;
   return scrollTop;
-}
+};
 
-function recoverScroll() {
+var recoverScroll = function recoverScroll() {
   if (document.body.dataset.preventScroll === 'true') {
     document.body.dataset.preventScroll = false;
     document.body.style['overflow-y'] = 'auto';
@@ -1125,7 +1058,38 @@ function recoverScroll() {
   }
 
   return false;
-}
+};
+
+var getSelectText = function getSelectText() {
+  return document.Selection ? document.selection.createRange().text : window.getSelection().toString();
+};
+
+var disableSelect = function disableSelect() {
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document;
+  return getElement(dom).onselectstart = function () {
+    return false;
+  };
+};
+
+var disableContextMenu = function disableContextMenu() {
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document;
+  return getElement(dom.oncontextmenu = function () {
+    return false;
+  });
+};
+
+var disableCopy = function disableCopy() {
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document;
+  return getElement(dom).oncopy = function () {
+    return false;
+  };
+};
+
+var replaceCopy = function replaceCopy(str) {
+  var dom = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window.document;
+  copyToClipboard(getSelectText() + '\n' + str);
+  disableCopy(dom);
+};
 
 var page = {
   scroll2Top: scroll2Top,
@@ -1140,7 +1104,12 @@ var page = {
   createElement: createElement,
   copyToClipboard: copyToClipboard,
   preventScroll: preventScroll,
-  recoverScroll: recoverScroll
+  recoverScroll: recoverScroll,
+  disableSelect: disableSelect,
+  disableContextMenu: disableContextMenu,
+  disableCopy: disableCopy,
+  getSelectText: getSelectText,
+  replaceCopy: replaceCopy
 };
 
 var hideMiddlePhoneNumber = function hideMiddlePhoneNumber(phoneNumber) {
