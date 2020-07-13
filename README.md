@@ -99,13 +99,10 @@ tool.*
 .REGEXP_IP                  // IPv4 或 IPv6 地址
 .REGEXP_DATE                // 日期 YYYY-MM-dd 或 YYYY/MM/dd
 .REGEXP_TIME_12             // HH:mm 12小时制
-.REGEXP_TIME_AM_PM          // HH:mm 12小时值 + AM/PM/am/pm
 .REGEXP_TIME_24             // HH:mm 24小时制
-.REGEXP_TIME_SEC            // HH:mm:SS 24小时制
-.REGEXP_TIME_24_LEADING     // 可选 H:mm 24小时制
 .REGEXP_AMOUNT_OF_MONEY     // 匹配金额（包含千分符）
 .REGEXP_HTML_TAG            // 匹配 HTML 标签
-.REGEXP_TAG_NAME            // 匹配重复字符串 - 取 HTML 标签名
+.REGEXP_REPEAT_STR            // 匹配重复字符串
 .REGEXP_LNG_LAT             // 经纬度
 .REGEXP_ID_CARD             // 身份证
 .REGEXP_POSTCODE            // 邮编
