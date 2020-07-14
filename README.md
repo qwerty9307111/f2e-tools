@@ -18,7 +18,7 @@ import tool from 'f2e-tools'
 tool.*
 ```
 
-[查看详细文档](./doc/README.zh-CN.md)
+[查看详细文档](./doc/_book/index.html)
 
 ## Math
 
