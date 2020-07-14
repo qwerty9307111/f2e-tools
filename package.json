@@ -14,7 +14,8 @@
     "uglify:index-amd": "uglifyjs build/index.amd.js -m -o build/index.amd.js",
     "uglify:index-cjs": "uglifyjs build/index.cjs.js -m -o build/index.cjs.js",
     "uglify:index-iife": "uglifyjs build/index.iife.js -m -o build/index.iife.js",
-    "uglify:index-system": "uglifyjs build/index.system.js -m -o build/index.system.js"
+    "uglify:index-system": "uglifyjs build/index.system.js -m -o build/index.system.js",
+    "doc": "bash deploy-doc.sh"
   },
   "repository": {
     "type": "git",
