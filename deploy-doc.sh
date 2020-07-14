@@ -11,6 +11,10 @@ cd _book
 
 git init
 
+git config user.email 2436415068@qq.com
+
+git config user.name yww
+
 git add -A
 
 git commit -m "deploy documents"
