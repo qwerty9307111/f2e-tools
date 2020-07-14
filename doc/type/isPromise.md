@@ -1,4 +1,4 @@
-# REGEXP
+# “TYPE” 方法
 
 ## $t.isPromise(value)
 

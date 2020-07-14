@@ -18,7 +18,7 @@ import tool from 'f2e-tools'
 tool.*
 ```
 
-[查看详细文档](./doc/_book/index.html)
+[查看详细文档](https://qwerty9307111.github.io/f2e-tools-doc/)
 
 ## Math
 
