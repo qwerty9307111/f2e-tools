@@ -454,7 +454,10 @@ var protoTypes = {
   object: '[object Object]',
   "null": '[object Null]',
   map: '[object Map]',
-  set: '[object Set]'
+  set: '[object Set]',
+  promise: '[object Promise]',
+  async: '[object AsyncFunction]',
+  date: '[object Date]'
 };
 
 var isString = function isString(val) {
@@ -466,15 +469,15 @@ var isNumber = function isNumber(val) {
 };
 
 var isNaN = function isNaN(val) {
-  return Number.isNaN(val);
+  return isNumber(val) && val.toString() === 'NaN';
 };
 
 var isFinite = function isFinite(val) {
-  return Number.isFinite(val);
+  return isNumber(val) && !isNaN(val) && val !== Infinity && val !== -Infinity;
 };
 
 var isInteger = function isInteger(val) {
-  return Number.isSafeInteger(val);
+  return isFinite(val) && "".concat(val).indexOf('.') < 0;
 };
 
 var isBigInt = function isBigInt(val) {
@@ -482,7 +485,7 @@ var isBigInt = function isBigInt(val) {
 };
 
 var isFloat = function isFloat(val) {
-  return Number.isFinite(val) && "".concat(val).includes('.');
+  return isFinite(val) && !isInteger(val);
 };
 
 var isBoolean = function isBoolean(val) {
@@ -525,8 +528,20 @@ var isSet = function isSet(val) {
   return checkPrototype(val) === protoTypes.set;
 };
 
+var isPromise = function isPromise(val) {
+  return checkPrototype(val) === protoTypes.promise;
+};
+
+var isAsync = function isAsync(val) {
+  return checkPrototype(val) === protoTypes.async;
+};
+
+var isDate = function isDate(val) {
+  return checkPrototype(val) === protoTypes.date;
+};
+
 var isEmpty = function isEmpty(val) {
-  return isArray(val) && val.length === 0 || isObject(val) && Object.keys(val).length === 0 || (isMap(val) || isSet(val)) && val.size === 0;
+  return isArray(val) && val.length === 0 || isObject(val) && Object.keys(val).length === 0 || (isMap(val) || isSet(val)) && val.size === 0 || isNull(val);
 };
 
 var type = {
@@ -547,7 +562,10 @@ var type = {
   isHTML: isHTML,
   isMap: isMap,
   isSet: isSet,
-  isEmpty: isEmpty
+  isEmpty: isEmpty,
+  isPromise: isPromise,
+  isAsync: isAsync,
+  isDate: isDate
 };
 
 var number2Amount = function number2Amount(num) {
