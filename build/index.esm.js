@@ -142,9 +142,23 @@ var flow = function flow(funcs) {
   };
 };
 
+var assign = function assign(o, n) {
+  var t = JSON.parse(JSON.stringify(o));
+
+  for (var p in n) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (n.hasOwnProperty(p) && !o.hasOwnProperty(p)) {
+      t[p] = n[p];
+    }
+  }
+
+  return t;
+};
+
 var util = {
   curry: curry,
-  flow: flow
+  flow: flow,
+  assign: assign
 };
 
 var pow = util.curry(function (num, pows) {
@@ -336,7 +350,7 @@ var math = {
 
 /* eslint-disable no-useless-escape */
 var regExp = {
-  REGEXP_PHONE: /^(0-?|86-?|17951-?)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/,
+  REGEXP_PHONE: /^(\+?0[ -]?|\+?86[ -]?|\+?17951[ -]?|\+?12593[ -]?)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/,
   // 手机号
   REGEXP_EMAIL: /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
   // 电子邮箱
@@ -823,7 +837,7 @@ var getDom = function getDom(dom) {
 };
 
 var getElement = function getElement(dom) {
-  return isHTML$1(dom) ? dom : window.document;
+  return isHTML$1(dom) ? dom : window.document.body;
 };
 
 var getScrollTop = function getScrollTop(dom) {
@@ -912,8 +926,8 @@ var scrollBottomByStep = function scrollBottomByStep(step) {
   return doScroll(dom, scrollStep);
 };
 
-var toFullScreen = function toFullScreen() {
-  var elem = document.body;
+var toFullScreen = function toFullScreen(dom) {
+  var elem = isHTML$1(dom) ? dom : document.body;
 
   if (elem.webkitRequestFullScreen) {
     return elem.webkitRequestFullScreen() || true;
@@ -961,6 +975,10 @@ var exitFullScreen = function exitFullScreen() {
 };
 
 var print = function print(option) {
+  if (!type.isObject(option)) {
+    throw new TypeError('option 类型错误');
+  }
+
   var defaultOption = {
     width: 1000,
     height: 900,
@@ -969,7 +987,7 @@ var print = function print(option) {
     closeWindow: false,
     delay: 200
   };
-  var opts = Object.assign({}, defaultOption, option); // 打开一个新窗口
+  var opts = util.assign(defaultOption, option); // 打开一个新窗口
 
   var myWindow = window.open(' ', '', "width=".concat(opts.width, ",height=").concat(opts.height, ",scrollbars=yes"));
   var bodyHtml = '';
@@ -1025,26 +1043,42 @@ var createElement = function createElement(str) {
   return el.firstElementChild;
 };
 
+var doCopy = function doCopy(str) {
+  var el = createElement("<textarea readonly value=\"".concat(str, "\" style=\"position: absolute;left: -9999px;\">").concat(str, "</textarea>"));
+  document.body.appendChild(el);
+  var selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+
+  if (selected) {
+    document.getSelection().removeAllRanges();
+    document.getSelection().addRange(selected);
+  }
+};
+
 var copyToClipboard = function copyToClipboard(str) {
-  return new Promise(function (resolve, reject) {
-    try {
-      var el = createElement("<textarea readonly value=\"".concat(str, "\" style=\"position: absolute;left: -9999px;\">").concat(str, "</textarea>"));
-      document.body.appendChild(el);
-      var selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
+  var result = {
+    then: function then(fn) {
+      if (type.isFunction(fn)) fn(str);
+      return result;
+    },
+    "catch": function _catch(fn) {}
+  };
 
-      if (selected) {
-        document.getSelection().removeAllRanges();
-        document.getSelection().addRange(selected);
-      }
+  try {
+    doCopy(str);
+  } catch (err) {
+    result.then = function (fn) {
+      return result;
+    };
 
-      resolve();
-    } catch (err) {
-      reject(err);
-    }
-  });
+    result["catch"] = function (fn) {
+      return type.isFunction(fn) && fn(err);
+    };
+  }
+
+  return result;
 };
 
 var scrollTop = 0;
@@ -1077,28 +1111,35 @@ var getSelectText = function getSelectText() {
 };
 
 var disableSelect = function disableSelect() {
-  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document;
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document.body;
   return getElement(dom).onselectstart = function () {
     return false;
   };
 };
 
+var recoverSelect = function recoverSelect() {
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document.body;
+  return getElement(dom).onselectstart = function () {
+    return true;
+  };
+};
+
 var disableContextMenu = function disableContextMenu() {
-  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document;
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document.body;
   return getElement(dom.oncontextmenu = function () {
     return false;
   });
 };
 
 var disableCopy = function disableCopy() {
-  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document;
+  var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.document.body;
   return getElement(dom).oncopy = function () {
     return false;
   };
 };
 
 var replaceCopy = function replaceCopy(str) {
-  var dom = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window.document;
+  var dom = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window.document.body;
   copyToClipboard(getSelectText() + '\n' + str);
   disableCopy(dom);
 };
@@ -1118,40 +1159,57 @@ var page = {
   preventScroll: preventScroll,
   recoverScroll: recoverScroll,
   disableSelect: disableSelect,
+  recoverSelect: recoverSelect,
   disableContextMenu: disableContextMenu,
   disableCopy: disableCopy,
   getSelectText: getSelectText,
   replaceCopy: replaceCopy
 };
 
+var getPrefix = function getPrefix(val) {
+  var matchFront = "".concat(val).match(/^\+?86[ -]?|^\+?0[ -]?|^\+?17951[ -]?|^\+?12593[ -]?/);
+  var prefix = '';
+  if (matchFront) prefix = matchFront[0];
+  return [prefix, "".concat(val).replace(prefix, '')];
+};
+
 var hideMiddlePhoneNumber = function hideMiddlePhoneNumber(phoneNumber) {
   var replaceStr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '*';
 
-  if (Number(phoneNumber) && String(phoneNumber).length === 11) {
-    return "".concat(phoneNumber).replace(/^(\d{3})\d{4}(\d{4})$/, "$1".concat(new Array(4).fill(replaceStr).join(''), "$2"));
-  }
+  var _getPrefix = getPrefix(phoneNumber),
+      _getPrefix2 = _slicedToArray(_getPrefix, 2),
+      prefix = _getPrefix2[0],
+      str = _getPrefix2[1];
 
-  return phoneNumber;
+  var len = "".concat(str).length;
+  if (!Number(str) || len <= 7) return phoneNumber;
+  var regExp = new RegExp("^(\\d{3})\\d{".concat(len - 3 - 4, "}(\\d{4})$"));
+  return prefix + "".concat(str).replace(regExp, "$1".concat(new Array(len - 3 - 4).fill(replaceStr).join(''), "$2"));
 };
 
-var hideFrontPhoneNumber = function hideFrontPhoneNumber(phoneNumber) {
+var hideFrontNumber = function hideFrontNumber(targetNumber) {
   var replaceStr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
-  if (Number(phoneNumber) && String(phoneNumber).length === 11) {
-    return "".concat(phoneNumber).replace(/^\d{7}(\d{4})$/, "".concat(new Array(7).fill(replaceStr).join(''), "$1"));
-  }
+  var _getPrefix3 = getPrefix(targetNumber),
+      _getPrefix4 = _slicedToArray(_getPrefix3, 2),
+      prefix = _getPrefix4[0],
+      str = _getPrefix4[1];
 
-  return phoneNumber;
+  var len = "".concat(str).length;
+  if (len <= 4 || !Number(str)) return targetNumber;
+  var replaceLength = len - 4;
+  var regExp = new RegExp("^\\d{".concat(replaceLength, "}(\\d{4})$"));
+  return (replaceStr && prefix) + "".concat(str).replace(regExp, "".concat(new Array(replaceLength).fill(replaceStr).join(''), "$1"));
 };
 
 var outOfNumber = function outOfNumber(number) {
   var maxNumber = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 99;
-  return Number.isFinite(Number(number)) && Number(number) > Number(maxNumber) ? "".concat(maxNumber, "+") : number;
+  return type.isFinite(Number(number)) && Number(number) > Number(maxNumber) ? "".concat(maxNumber, "+") : number;
 };
 
 var other = {
   hideMiddlePhoneNumber: hideMiddlePhoneNumber,
-  hideFrontPhoneNumber: hideFrontPhoneNumber,
+  hideFrontNumber: hideFrontNumber,
   outOfNumber: outOfNumber
 };
 
