@@ -67,7 +67,6 @@ tool.*
 .disableContextMenu(?DOM = document)         // disableContextMenu :: ?document -> undefined
 .disableCopy(?DOM = document)                // disableCopy        :: ?document -> undefined
 .getSelectText()                             // getSelectText      :: any -> string
-.replaceCopy(str, ?DOM = document)           // replaceCopy        :: (string, ?document) -> undefined
 ```
 
 ## RegExp

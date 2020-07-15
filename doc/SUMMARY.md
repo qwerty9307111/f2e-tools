@@ -1,6 +1,47 @@
 # Summary
 
-* [Introduction](README.md)
+* [简介](README.md)
+
+* 数学 Math
+
+  * [.add](math/add.md)
+  * [.addition](math/addition.md)
+  * [.subtract](math/subtract.md)
+  * [.subtraction](math/subtraction.md)
+  * [.multiply](math/multiply.md)
+  * [.multiplication](math/multiplication.md)
+  * [.divide](math/divide.md)
+  * [.division](math/division.md)
+  * [.round](math/round.md)
+
+* 金额转换 Amount
+  * [.amount2Chinese](amount/amount2Chinese.md)
+  * [.amount2Number](amount/amount2Number.md)
+  * [.number2Amount](amount/number2Amount.md)
+  * [.number2Chinese](amount/number2Chinese.md)
+  * [.number2ChineseWithOption](amount/number2ChineseWithOption.md)
+  * [.number2Percentage](amount/number2Percentage.md)
+  * [.percentage2Number](amount/percentage2Number.md)
+
+* 页面相关 Page
+  * [.scroll2Top](page/scroll2Top.md)
+  * [.scroll2Bottom](page/scroll2Bottom.md)
+  * [.isScrollTop](page/isScrollTop.md)
+  * [.isScrollBottom](page/isScrollBottom.md)
+  * [.scrollTopByStep](page/scrollTopByStep.md)
+  * [.scrollBottomByStep](page/scrollBottomByStep.md)
+  * [.toFullScreen](page/toFullScreen.md)
+  * [.exitFullScreen](page/exitFullScreen.md)
+  * [.print](page/print.md)
+  * [.createElement](page/createElement.md)
+  * [.copyToClipboard](page/copyToClipboard.md)
+  * [.preventScroll](page/preventScroll.md)
+  * [.recoverScroll](page/recoverScroll.md)
+  * [.disableSelect](page/disableSelect.md)
+  * [.recoverSelect](page/recoverSelect.md)
+  * [.disableContextMenu](page/disableContextMenu.md)
+  * [.disableCopy](page/disableCopy.md)
+  * [.getSelectText](page/getSelectText.md)
 
 * 类型判断 Type
   * [.isArray](type/isArray.md)
@@ -24,27 +65,6 @@
   * [.isString](type/isString.md)
   * [.isSymbol](type/isSymbol.md)
   * [.isUndefined](type/isUndefined.md)
-
-* 数学 Math
-
-  * [.add](math/add.md)
-  * [.addition](math/addition.md)
-  * [.subtract](math/subtract.md)
-  * [.subtraction](math/subtraction.md)
-  * [.multiply](math/multiply.md)
-  * [.multiplication](math/multiplication.md)
-  * [.divide](math/divide.md)
-  * [.division](math/division.md)
-  * [.round](math/round.md)
-
-* 金额转换 Amount
-  * [.amount2Chinese](amount/amount2Chinese.md)
-  * [.amount2Number](amount/amount2Number.md)
-  * [.number2Amount](amount/number2Amount.md)
-  * [.number2Chinese](amount/number2Chinese.md)
-  * [.number2ChineseWithOption](amount/number2ChineseWithOption.md)
-  * [.number2Percentage](amount/number2Percentage.md)
-  * [.percentage2Number](amount/percentage2Number.md)
 
 * 正则表达式 RegExp
   * [.REGEXP_AMOUNT_OF_MONEY 金额](regexp/REGEXP_AMOUNT_OF_MONEY.md)
@@ -97,3 +117,8 @@
   * [.REGEXP_TIME_24 时间](regexp/REGEXP_TIME_24.md)
   * [.REGEXP_UPPER_EN_CHARACTERS 大写英文](regexp/REGEXP_UPPER_EN_CHARACTERS.md)
   * [.REGEXP_URL URL 地址](regexp/REGEXP_URL.md)
+
+* 其它 Other
+  * [.hideMiddlePhoneNumber](other/hideMiddlePhoneNumber.md)
+  * [.hideFrontNumber](other/hideFrontNumber.md)
+  * [.outOfNumber](other/outOfNumber.md)
