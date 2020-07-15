@@ -19,7 +19,17 @@ const flow = funcs => {
   }
 }
 
+const assign = (o, n) => {
+  const t = JSON.parse(JSON.stringify(o))
+  for (var p in n) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (n.hasOwnProperty(p) && (!o.hasOwnProperty(p))) { t[p] = n[p] }
+  }
+  return t
+}
+
 export default {
   curry,
-  flow
+  flow,
+  assign
 }
