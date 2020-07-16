@@ -661,7 +661,7 @@ var int2Chinese = function int2Chinese(num) {
   };
   var number = parseFloat(num);
 
-  if (!Number.isFinite(number)) {
+  if (!type.isFinite(number)) {
     return num;
   }
 
@@ -841,19 +841,19 @@ var getElement = function getElement(dom) {
 };
 
 var getScrollTop = function getScrollTop(dom) {
+  if (isHTML$1(dom)) return dom.scrollTop;
   var bodyScrollTop = 0;
   var documentScrollTop = 0;
   document.body && (bodyScrollTop = document.body.scrollTop);
-  isHTML$1(dom) && (bodyScrollTop = dom.scrollTop);
   document.documentElement && (documentScrollTop = document.documentElement.scrollTop);
   return Math.max(bodyScrollTop, documentScrollTop);
 };
 
 var getScrollHeight = function getScrollHeight(dom) {
+  if (isHTML$1(dom)) return dom.scrollHeight;
   var bodyScrollHeight = 0;
   var documentScrollHeight = 0;
   document.body && (bodyScrollHeight = document.body.scrollHeight);
-  isHTML$1(dom) && (bodyScrollHeight = dom.scrollHeight);
   document.documentElement && (documentScrollHeight = document.documentElement.scrollHeight);
   return Math.max(bodyScrollHeight, documentScrollHeight);
 };
@@ -879,16 +879,20 @@ var isScrollBottom = function isScrollBottom() {
   var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
   var limit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.1;
   var res = getScrollTop(dom) + getWindowHeight(dom) - getScrollHeight(dom);
-  return res >= 0 && res <= limit;
+  return Math.abs(res) <= limit;
 };
 
 var doScroll = function doScroll(dom) {
   var top = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  getDom(dom).scrollTo({
-    top: top,
-    left: 0,
-    behavior: 'smooth'
-  });
+  getElement(dom).style.scrollBehavior !== 'smooth' && (getElement(dom).style.scrollBehavior = 'smooth');
+  document.documentElement.style.scrollBehavior !== 'smooth' && (document.documentElement.style.scrollBehavior = 'smooth');
+
+  try {
+    getDom(dom).scrollTo(0, top);
+  } catch (err) {
+    getDom(dom).scrollTop = top;
+  }
+
   return getScrollTop(dom);
 };
 
@@ -975,7 +979,9 @@ var exitFullScreen = function exitFullScreen() {
 };
 
 var print = function print(option) {
-  if (!type.isObject(option)) {
+  var options = option || {};
+
+  if (!type.isObject(options)) {
     throw new TypeError('option 类型错误');
   }
 
@@ -987,7 +993,7 @@ var print = function print(option) {
     closeWindow: false,
     delay: 200
   };
-  var opts = util.assign(defaultOption, option); // 打开一个新窗口
+  var opts = util.assign(defaultOption, options); // 打开一个新窗口
 
   var myWindow = window.open(' ', '', "width=".concat(opts.width, ",height=").concat(opts.height, ",scrollbars=yes"));
   var bodyHtml = '';
@@ -1083,22 +1089,22 @@ var copyToClipboard = function copyToClipboard(str) {
 
 var scrollTop = 0;
 
-var preventScroll = function preventScroll() {
-  if (document.body.dataset.preventScroll === 'true') return false;
+var preventScroll = function preventScroll(dom) {
+  if (getElement(dom).dataset.preventScroll === 'true') return false;
   scrollTop = getScrollTop();
-  document.body.style['overflow-y'] = 'hidden';
-  document.body.style.position = 'fixed';
-  document.body.style.width = '100%';
-  document.body.style.top = -scrollTop + 'px';
-  document.body.dataset.preventScroll = true;
+  getElement(dom).style['overflow-y'] = 'hidden'; // getElement(dom).style.position = 'fixed'
+  // getElement(dom).style.width = '100%'
+
+  getElement(dom).style.top = -scrollTop + 'px';
+  getElement(dom).dataset.preventScroll = true;
   return scrollTop;
 };
 
-var recoverScroll = function recoverScroll() {
-  if (document.body.dataset.preventScroll === 'true') {
-    document.body.dataset.preventScroll = false;
-    document.body.style['overflow-y'] = 'auto';
-    document.body.style.position = 'static';
+var recoverScroll = function recoverScroll(dom) {
+  if (getElement(dom).dataset.preventScroll === 'true') {
+    getElement(dom).dataset.preventScroll = false;
+    getElement(dom).style['overflow-y'] = 'auto'; // getElement(dom).style.position = 'static'
+
     window.scrollTo(0, scrollTop);
     return scrollTop;
   }
