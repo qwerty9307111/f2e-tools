@@ -1,6 +1,6 @@
 {
   "name": "f2e-tools",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "javascript tools RegExp number math type scroll copy",
   "main": "build/index.js",
   "module": "build/index.esm.js",
