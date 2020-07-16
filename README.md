@@ -18,7 +18,7 @@ import tool from 'f2e-tools'
 tool.*
 ```
 
-[查看详细文档](https://qwerty9307111.github.io/f2e-tools-doc/)
+[点击查看详细文档](https://qwerty9307111.github.io/f2e-tools-doc/)
 
 ## Math
 
@@ -154,7 +154,7 @@ tool.*
 ``` javascript
 
 .hideMiddlePhoneNumber(phoneNumber, ?replaceStr = '*') // hideMiddlePhoneNumber :: (number | string, string = '*') -> string
-.hideFrontPhoneNumber(phoneNumber, ?replaceStr = '')   // hideFrontPhoneNumber  :: (number | string, string = '') -> string
+.hideFrontNumber(phoneNumber, ?replaceStr = '')        // hideFrontNumber  :: (number | string, string = '') -> string
 .outOfNumber(number, max = 99)                         // outOfNumber           :: (number, number) -> string | number
 
 ```
