@@ -90,8 +90,8 @@ tool.*
 .REGEXP_NEGATIVE_FLOAT      // 负浮点数
 .REGEXP_FLOAT               // 浮点数
 .REGEXP_EN_NUM              // 英文 + 数字
-.REGEXP_PASS_COMPLEX        // 复杂密码（包含大小写字母，数字，特殊字符，至少8个字符长）
-.REGEXP_PASS_MODERATE       // 中等密码（包含大小写字母，数字，至少8个字符长）
+.REGEXP_PASS_COMPLEX[4][9]  // 复杂密码（包含大小写字母，数字，特殊字符）特殊调用方式，见详细文档
+.REGEXP_PASS_MODERATE[3][8] // 中等密码（包含大小写字母，数字）特殊调用方式，见详细文档
 .REGEXP_URL                 // URL 地址
 .REGEXP_IPV4                // IPv4 地址
 .REGEXP_IPV6                // IPv6 地址
