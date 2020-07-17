@@ -1,6 +1,6 @@
 # “Amount” 方法
 
-## $t.number2Amount(string)
+## $t.amount2Number(string)
 
 从金额字符串中解析数字
 

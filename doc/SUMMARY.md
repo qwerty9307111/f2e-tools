@@ -121,4 +121,5 @@
 * 其它 Other
   * [.hideMiddlePhoneNumber](other/hideMiddlePhoneNumber.md)
   * [.hideFrontNumber](other/hideFrontNumber.md)
+  * [.hideMiddleNumber](other/hideMiddleNumber.md)
   * [.outOfNumber](other/outOfNumber.md)
