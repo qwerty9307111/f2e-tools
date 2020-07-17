@@ -1,6 +1,6 @@
 {
   "name": "f2e-tools",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "javascript tools RegExp number math type scroll copy",
   "main": "build/index.js",
   "module": "build/index.esm.js",
@@ -32,9 +32,12 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "@babel/runtime": "^7.10.5"
+  },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.10.5",
+    "@babel/plugin-transform-runtime": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
