@@ -188,8 +188,8 @@ REGEXP_POSITIVE_NUMBER:/^\+?(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-
 REGEXP_NEGATIVE_NUMBER:/^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/,// 负数
 REGEXP_FLOAT:/^[-\+]?([1-9]\d*\.\d+|0\.\d*[1-9]\d*|0?\.0+)$/,// 浮点数
 REGEXP_EN_NUM:/^[a-z0-9]+$/i,// 英文 + 数字
-REGEXP_PASS_COMPLEX:passProxy("COMPLEX"),// 复杂密码（包含大小写字母，数字，特殊字符，至少4个字符长）
-REGEXP_PASS_MODERATE:passProxy("MODERATE"),// 中等密码（包含大小写字母，数字，至少3个字符长）
+REGEXP_PASS_COMPLEX:Proxy?passProxy("COMPLEX"):new RegExp(passRegExp.COMPLEX+"{4,}$"),// 复杂密码（包含大小写字母，数字，特殊字符，至少4个字符长）
+REGEXP_PASS_MODERATE:Proxy?passProxy("MODERATE"):new RegExp(passRegExp.MODERATE+"{3,}$"),// 中等密码（包含大小写字母，数字，至少3个字符长）
 REGEXP_URL:/^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z#0-9_-](\?)?)*)*$/i,// URL 地址
 REGEXP_IPV4:/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,// IPv4 地址
 REGEXP_IPV6:/(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/,// IPv6 地址
@@ -259,4 +259,6 @@ var getPrefix=function getPrefix(val){var matchFront="".concat(val).match(/^\+?8
 
 var tools=_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({},math),regExp),amount),page),other),type);
 
-export default tools;
+var exportTool=tools;var proxyFn=function proxyFn(target,key,receiver,targetKey){if(key.indexOf(targetKey)>=0&&key!==targetKey){var lastStr=key.split(targetKey+"_")[1]||"";var _lastStr$split=lastStr.split("_"),_lastStr$split2=_slicedToArray(_lastStr$split,2),startIndex=_lastStr$split2[0],endIndex=_lastStr$split2[1];return target[targetKey][startIndex][endIndex]}return target[key]};if(Proxy){exportTool=new Proxy(tools,{get:function get(target,key,receiver){if(key.indexOf("REGEXP_PASS_COMPLEX_")>=0){return proxyFn(target,key,receiver,"REGEXP_PASS_COMPLEX")}if(key.indexOf("REGEXP_PASS_MODERATE_")>=0){return proxyFn(target,key,receiver,"REGEXP_PASS_MODERATE")}return target[key]}});}var exportTool$1 = exportTool;
+
+export default exportTool$1;
