@@ -1,3 +1,4 @@
+import commonjs from 'rollup-plugin-commonjs'
 const path = require('path')
 const babel = require('rollup-plugin-babel')
 const nodeResolve = require('rollup-plugin-node-resolve')
@@ -38,12 +39,11 @@ module.exports = {
     }
   ],
   plugins: [
-    nodeResolve({
-      extensions,
-      modulesOnly: true
-    }),
+    nodeResolve(),
+    commonjs(),
     babel({
       exclude: 'node_modules/**',
+      // runtimeHelpers: true,
       extensions
     })
   ]

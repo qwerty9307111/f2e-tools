@@ -1,10 +1,21 @@
 {
   "presets": [
     [
-      "@babel/preset-env"
+      "@babel/preset-env",
+      // {
+      //   "modules": false,
+      //   "useBuiltIns": "usage",
+      //   "corejs": 2,
+      //   "loose": true,
+      //   "targets": {
+      //     "node": "4",
+      //     "browsers": ["last 2 versions"]
+      //   }
+      // }
     ]
   ],
   "plugins": [
-    // "external-helpers"
-  ]
+    // ["@babel/plugin-transform-runtime", { "corejs": 2, "loose": true }]
+  ],
+  "minified": true
 }
