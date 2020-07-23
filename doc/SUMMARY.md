@@ -123,3 +123,5 @@
   * [.hideFrontNumber](other/hideFrontNumber.md)
   * [.hideMiddleNumber](other/hideMiddleNumber.md)
   * [.outOfNumber](other/outOfNumber.md)
+  * [.hideLastName](other/hideLastName.md)
+  * [.hideFirstName](other/hideFirstName.md)

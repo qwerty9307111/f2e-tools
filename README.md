@@ -154,7 +154,8 @@ tool.*
 ``` javascript
 
 .hideMiddlePhoneNumber(phoneNumber, ?replaceStr = '*') // hideMiddlePhoneNumber :: (number | string, string = '*') -> string
-.hideFrontNumber(phoneNumber, ?replaceStr = '')        // hideFrontNumber  :: (number | string, string = '') -> string
+.hideFrontNumber(phoneNumber, ?replaceStr = '')        // hideFrontNumber       :: (number | string, string = '') -> string
 .outOfNumber(number, max = 99)                         // outOfNumber           :: (number, number) -> string | number
-
+.hideLastName(name, replaceStr = '*')                  // hideLastName          :: (string, string = '*') -> string
+.hideFirstName(name, gender)                           // hideFirstName          :: (string, number) -> string
 ```
