@@ -1,3 +1,4 @@
+/* global globalThis */
 import tools from './lib/index.js'
 
 let exportTool = tools
@@ -10,8 +11,12 @@ const proxyFn = (target, key, receiver, targetKey) => {
   }
   return target[key]
 }
-
-if (Proxy) {
+const that = (typeof globalThis === 'object' && globalThis) ||
+(typeof window === 'object' && window) ||
+(typeof global === 'object' && global) ||
+(typeof self === 'object' && self) ||
+this
+if (that.Proxy) {
   exportTool = new Proxy(tools, {
     get (target, key, receiver) {
       if (key.indexOf('REGEXP_PASS_COMPLEX_') >= 0) {
